@@ -1,37 +1,21 @@
 name: Deploy to Railway
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Run Tests"]
     branches: [main]
+    types:
+      - completed
 
 jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          
-      - name: Run tests
-        run: |
-          pytest
-
   deploy:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
       SVC_ID: fastapi-demo
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    # Only run if the test workflow succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
       - run: railway up --service=${{ env.SVC_ID }}

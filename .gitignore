@@ -36,5 +36,10 @@ ENV/
 htmlcov/
 .pytest_cache/
 
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
 # Misc
 .DS_Store 
