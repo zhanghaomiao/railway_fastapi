@@ -30,8 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
-      SVC_ID: 7cc4f101-8841-4761-b84c-f50595aedf37
+      SVC_ID: fastapi-demo
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - run: railway up --service=${{ env.SVC_ID }} --verbose
+      - run: railway up --service=${{ env.SVC_ID }}
